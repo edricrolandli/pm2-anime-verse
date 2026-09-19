@@ -8,14 +8,14 @@ class GradientBackground extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: const BoxDecoration(
-        gradient: LinearGradient(
+          gradient: LinearGradient(
             colors: [
               Color(0xFF333465),
               Color(0xFF25254D),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-        )
+          )
       ),
       child: child,
     );
