@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 class AppScaffold extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget body;
-  
-  
+
+
   const AppScaffold ({
     super.key,
     this.appBar,
@@ -16,9 +16,9 @@ class AppScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return GradientBackground(
         child: Scaffold(
-            body: body,
-            appBar: appBar,
-            backgroundColor: Colors.transparent,
+          body: body,
+          appBar: appBar,
+          backgroundColor: Colors.transparent,
         )
     );
   }
