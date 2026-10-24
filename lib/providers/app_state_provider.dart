@@ -14,11 +14,27 @@ class AppStateProvider extends ChangeNotifier {
   List<Anime> _favorites = [];
   static const String _storageKey = 'favorite_anime_list'; // Kunci penyimpanan
   String _selectedGenre = "All"; // Default ke "All"
+  String _homeSearchQuery = "";
+  String _favoriteSearchQuery = "";
 
   // 2. GETTER (Akses Publik)
   // Widget lain hanya bisa 'mendapatkan' datanya, tidak bisa mengubah.
   List<Anime> get favorites => _favorites;
   String get selectedGenre => _selectedGenre;
+  String get homeSearchQuery => _homeSearchQuery;
+  String get favoriteSearchQuery => _favoriteSearchQuery;
+
+  /// Untuk update query HomeScreen
+  void setHomeSearchQuery(String query) {
+    _homeSearchQuery = query;
+    notifyListeners();
+  }
+
+  /// Untuk update query FavoriteScreen
+  void setFavoriteSearchQuery(String query) {
+    _favoriteSearchQuery = query;
+    notifyListeners();
+  }
 
   // Method untuk mengubah genre yang dipilih
   void setSelectedGenre(String genre) {
@@ -36,6 +52,28 @@ class AppStateProvider extends ChangeNotifier {
         final genres = anime.genre.split(',').map((g) => g.trim()).toList();
         // Cek apakah list genre anime mengandung genre yang dipilih
         return genres.contains(_selectedGenre);
+      }).toList();
+    }
+
+    // TERAPKAN FILTER SEARCH (setelah filter genre)
+    if (_homeSearchQuery.isNotEmpty) {
+      result = result.where((anime) {
+        // Bandingkan dalam lowercase agar case-insensitive
+        return anime.title.toLowerCase().contains(_homeSearchQuery.toLowerCase());
+      }).toList();
+    }
+
+    return result;
+  }
+
+  /// Get filtered favorites for FavoriteScreen (based on favorite search)
+  List<Anime> getFilteredFavorites() {
+    List<Anime> result = _favorites; // Mulai dari daftar favorit
+
+    // TERAPKAN FILTER SEARCH FAVORIT
+    if (_favoriteSearchQuery.isNotEmpty) {
+      result = result.where((anime) {
+        return anime.title.toLowerCase().contains(_favoriteSearchQuery.toLowerCase());
       }).toList();
     }
 
