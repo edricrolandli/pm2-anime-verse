@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../data/dummy_data.dart';
 import '../models/anime.dart';
 
 class AppStateProvider extends ChangeNotifier {
@@ -12,10 +13,34 @@ class AppStateProvider extends ChangeNotifier {
   // Data ini privat (diawali '_') agar tidak bisa diubah dari luar class.
   List<Anime> _favorites = [];
   static const String _storageKey = 'favorite_anime_list'; // Kunci penyimpanan
+  String _selectedGenre = "All"; // Default ke "All"
 
   // 2. GETTER (Akses Publik)
   // Widget lain hanya bisa 'mendapatkan' datanya, tidak bisa mengubah.
   List<Anime> get favorites => _favorites;
+  String get selectedGenre => _selectedGenre;
+
+  // Method untuk mengubah genre yang dipilih
+  void setSelectedGenre(String genre) {
+    _selectedGenre = genre;
+    notifyListeners(); // Beri tahu listener (HomeScreen & GenreList)
+  }
+
+  List<Anime> getFilteredAnimeForHome() {
+    List<Anime> result = DummyData.animeList;
+
+    // Apply genre filter
+    if (_selectedGenre != "All") {
+      result = result.where((anime) {
+        // Pecah genre string (misal: "Action, Adventure") menjadi list ["Action", "Adventure"]
+        final genres = anime.genre.split(',').map((g) => g.trim()).toList();
+        // Cek apakah list genre anime mengandung genre yang dipilih
+        return genres.contains(_selectedGenre);
+      }).toList();
+    }
+
+    return result;
+  }
 
   // Helper function untuk mengecek apakah anime sudah ada di favorit
   bool isFavorite(String animeId) {
