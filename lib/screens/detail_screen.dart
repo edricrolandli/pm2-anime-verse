@@ -319,21 +319,6 @@ class DetailScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: screenHeight * 0.03),
-
-
-                  SizedBox(height: screenHeight * 0.015),
-
-                  Text(
-                    anime.description,
-                    style: TextStyle(
-                      color: Colors.white.withValues(alpha: 0.9),
-                      fontSize: screenWidth * 0.038,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-
-                  SizedBox(height: screenHeight * 0.03),
                 ],
               ),
             ),
