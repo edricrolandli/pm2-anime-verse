@@ -44,7 +44,8 @@ class GenreList extends StatelessWidget {
             child: InkWell(
               borderRadius: BorderRadius.circular(screenWidth * 0.06),
               onTap: () {
-                // TODO: Update the selected genre and filter the anime list accordingly
+                // Panggil callback dengan genre
+                onGenreSelected?.call(genre);
               },
               child: Container(
                 padding: EdgeInsets.symmetric(
