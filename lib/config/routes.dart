@@ -3,10 +3,10 @@ import 'package:anime_verse/screens/home_screen.dart';
 import 'package:anime_verse/screens/profile_screen.dart';
 import 'package:anime_verse/screens/signin_screen.dart';
 import 'package:anime_verse/screens/signup_screen.dart';
-import 'package:anime_verse/widgets/bottom_navigation_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../screens/detail_screen.dart';
+import '../widgets/bottom_navigation_shell.dart';
 
 class AppRoutes {
   static const String signIn = '/sign-in';
