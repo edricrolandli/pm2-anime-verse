@@ -6,8 +6,21 @@ import '../widgets/anime_view.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/genre_list.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController _searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,6 +64,10 @@ class HomeScreen extends StatelessWidget {
                       ],
                     ),
                     child: TextField(
+                      controller: _searchController,
+                      onChanged: (value) {
+                        provider.setHomeSearchQuery(value);
+                      },
                       decoration: InputDecoration(
                         hintText: "Anime Title",
                         hintStyle: TextStyle(
@@ -62,6 +79,15 @@ class HomeScreen extends StatelessWidget {
                           color: Colors.grey,
                           size: screenWidth * 0.06,
                         ),
+                        suffixIcon: provider.homeSearchQuery.isNotEmpty
+                            ? IconButton(
+                          icon: Icon(Icons.clear, color: Colors.white),
+                          onPressed: () {
+                            _searchController.clear();
+                            provider.setHomeSearchQuery('');
+                          },
+                        )
+                            : null,
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(screenWidth * 0.075),
                           borderSide: BorderSide.none,
