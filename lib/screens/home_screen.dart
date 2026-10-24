@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../providers/app_state_provider.dart';
 import '../widgets/anime_view.dart';
 import '../widgets/app_scaffold.dart';
 import '../widgets/genre_list.dart';
@@ -25,71 +27,83 @@ class HomeScreen extends StatelessWidget {
         backgroundColor: Colors.transparent,
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            // Search Bar
-            Padding(
-              padding: EdgeInsets.all(screenWidth * 0.04),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
-                      blurRadius: screenWidth * 0.02,
-                      offset: Offset(0, screenHeight * 0.005),
-                    ),
-                  ],
-                ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Anime Title",
-                    hintStyle: TextStyle(
-                      color: Colors.grey,
-                      fontSize: screenWidth * 0.04,
-                    ),
-                    prefixIcon: Icon(
-                      Icons.search,
-                      color: Colors.grey,
-                      size: screenWidth * 0.06,
-                    ),
-                    border: OutlineInputBorder(
+      // Gunakan Consumer untuk mendapatkan daftar anime TERFILTER
+      body: Consumer<AppStateProvider>(
+        builder: (context, provider, child) {
+          // Ambil data yang sudah difilter (genre)
+          final filteredAnime = provider.getFilteredAnimeForHome();
+          return SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Search Bar
+                Padding(
+                  padding: EdgeInsets.all(screenWidth * 0.04),
+                  child: Container(
+                    decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                      borderSide: BorderSide.none,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: screenWidth * 0.02,
+                          offset: Offset(0, screenHeight * 0.005),
+                        ),
+                      ],
                     ),
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                      borderSide: BorderSide.none,
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: "Anime Title",
+                        hintStyle: TextStyle(
+                          color: Colors.grey,
+                          fontSize: screenWidth * 0.04,
+                        ),
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: Colors.grey,
+                          size: screenWidth * 0.06,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(screenWidth * 0.075),
+                          borderSide: BorderSide.none,
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(screenWidth * 0.075),
+                          borderSide: BorderSide.none,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(screenWidth * 0.075),
+                          borderSide: BorderSide(color: Colors.white),
+                        ),
+                        filled: true,
+                        fillColor: Color(0xFF0b395e),
+                        contentPadding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.05,
+                          vertical: screenHeight * 0.015,
+                        ),
+                      ),
+                      style: TextStyle(
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.white,
+                      ),
                     ),
-                    focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(screenWidth * 0.075),
-                      borderSide: BorderSide(color: Colors.white),
-                    ),
-                    filled: true,
-                    fillColor: Color(0xFF0b395e),
-                    contentPadding: EdgeInsets.symmetric(
-                      horizontal: screenWidth * 0.05,
-                      vertical: screenHeight * 0.015,
-                    ),
-                  ),
-                  style: TextStyle(
-                    fontSize: screenWidth * 0.04,
-                    color: Colors.white,
-                  ),
-                ),
 
-              ),
+                  ),
 
+                ),
+                GenreList(
+                  selected: provider.selectedGenre,
+                  onGenreSelected: (genre) {
+                    provider.setSelectedGenre(genre);
+                  },
+                ),
+                SizedBox(height: screenHeight * 0.03),
+                AnimeView(animeList: filteredAnime),
+                SizedBox(height: screenHeight * 0.025),
+
+              ],
             ),
-            GenreList(),
-            SizedBox(height: screenHeight * 0.03),
-            const AnimeView(),
-            SizedBox(height: screenHeight * 0.025),
-
-          ],
-        ),
+          );
+        },
       ),
     );
 
